@@ -1,0 +1,260 @@
+/* Планшеты */
+@media (max-width: 1024px) {
+    .nav-container {
+        padding: 0 1.5rem;
+    }
+    
+    .hero-content {
+        padding: 2rem;
+    }
+    
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .characters-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+}
+
+/* Мобильные устройства */
+@media (max-width: 768px) {
+    /* Навигация */
+    .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 70px;
+        flex-direction: column;
+        background: white;
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: var(--shadow-2);
+        padding: 2rem 0;
+    }
+    
+    .nav-menu.active {
+        left: 0;
+    }
+    
+    .nav-link {
+        padding: 0.5rem 0;
+        display: block;
+    }
+    
+    .hamburger {
+        display: flex;
+    }
+    
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .hamburger.active span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    
+    .hamburger.active span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+    
+    /* Герой секция */
+    .hero-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .hero-content {
+        padding: 2rem 1rem;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+    }
+    
+    .hero-characters {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+    
+    /* Селекторы эпизодов */
+    .episode-selector {
+        gap: 1rem;
+    }
+    
+    .season-select,
+    .episode-select {
+        flex-direction: column;
+        text-align: center;
+        width: 100%;
+    }
+    
+    /* Видео контролы */
+    .video-controls {
+        padding: 15px 10px 10px;
+    }
+    
+    .controls-left,
+    .controls-right {
+        gap: 10px;
+    }
+    
+    .control-btn {
+        font-size: 16px;
+        padding: 6px;
+    }
+    
+    .time-display {
+        font-size: 12px;
+    }
+    
+    /* Кнопки действий */
+    .player-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .action-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Карточки персонажей */
+    .characters-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Секции */
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    /* Модальное окно */
+    .modal-content {
+        margin: 20% auto;
+        padding: 1.5rem;
+        width: 90%;
+    }
+    
+    .share-buttons {
+        flex-direction: column;
+    }
+    
+    /* Футер */
+    .footer-social {
+        gap: 1rem;
+    }
+}
+
+/* Маленькие мобильные устройства */
+@media (max-width: 480px) {
+    .logo span {
+        display: none;
+    }
+    
+    .hero-title {
+        font-size: 1.5rem;
+    }
+    
+    .cta-button {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .video-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .controls-left,
+    .controls-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .volume-control:hover .volume-slider {
+        width: 60px;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .download-button {
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+    }
+    
+    .character-card {
+        padding: 1rem;
+    }
+    
+    .character-card img {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+/* Ландшафтная ориентация на мобильных */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero-section {
+        min-height: auto;
+        padding: 2rem 0;
+    }
+    
+    .video-player-wrapper {
+        max-height: 90vh;
+    }
+    
+    .video-controls {
+        transform: translateY(0) !important;
+    }
+}
+
+/* Высокое разрешение экрана */
+@media (min-width: 1440px) {
+    .nav-container,
+    .player-container,
+    .about-container,
+    .comments-container,
+    .footer-container {
+        max-width: 1400px;
+    }
+    
+    .hero-title {
+        font-size: 5rem;
+    }
+    
+    .hero-description {
+        font-size: 2rem;
+    }
+}
+
+/* Печать */
+@media print {
+    .main-header,
+    .video-player-wrapper,
+    .player-actions,
+    .download-section,
+    .comments-section,
+    .ad-container {
+        display: none;
+    }
+    
+    body {
+        color: black;
+        background: white;
+    }
+    
+    .hero-section {
+        background: none;
+        min-height: auto;
+    }
+}

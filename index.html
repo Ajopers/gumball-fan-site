@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Удивительный мир Гамбола - Фан-сайт</title>
+    <meta name="description" content="Смотрите мультсериал Удивительный мир Гамбола онлайн бесплатно в HD качестве">
+    
+    <!-- Стили -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/player.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Иконки -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <img src="images/logo.png" alt="Гамбол лого">
+                    <span>Мир Гамбола</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link">Главная</a></li>
+                    <li><a href="#watch" class="nav-link">Смотреть</a></li>
+                    <li><a href="#about" class="nav-link">О сериале</a></li>
+                    <li><a href="#download" class="nav-link">Скачать</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Главный баннер -->
+    <section id="home" class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Удивительный мир Гамбола</h1>
+            <p class="hero-description">Погрузись в безумный и веселый мир семьи Уоттерсонов!</p>
+            <button class="cta-button" onclick="scrollToPlayer()">
+                <i class="fas fa-play"></i> Смотреть сейчас
+            </button>
+        </div>
+        <div class="hero-characters">
+            <img src="images/gumball-hero.png" alt="Гамбол и Дарвин">
+        </div>
+    </section>
+
+    <!-- Рекламный блок сверху -->
+    <div id="yandex-ad-top" class="ad-container">
+        <!-- Место для рекламы Яндекс.Директ -->
+        <div class="ad-placeholder">Реклама</div>
+    </div>
+
+    <!-- Секция видеоплеера -->
+    <section id="watch" class="player-section">
+        <div class="player-container">
+            <h2 class="section-title">Смотреть онлайн</h2>
+            
+            <!-- Выбор сезона и серии -->
+            <div class="episode-selector">
+                <div class="season-select">
+                    <label for="season">Сезон:</label>
+                    <select id="season">
+                        <option value="1">Сезон 1</option>
+                    </select>
+                </div>
+                <div class="episode-select">
+                    <label for="episode">Серия:</label>
+                    <select id="episode">
+                        <!-- Серии будут добавлены через JavaScript -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- Кастомный видеоплеер -->
+            <div class="video-player-wrapper">
+                <div class="custom-video-player">
+                    <video id="main-video" crossorigin="anonymous">
+                        <source src="" type="video/mp4">
+                        Ваш браузер не поддерживает видео.
+                    </video>
+                    
+                    <!-- Оверлей для управления -->
+                    <div class="video-overlay">
+                        <div class="loading-spinner">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                    </div>
+
+                    <!-- Панель управления плеера -->
+                    <div class="video-controls">
+                        <div class="controls-left">
+                            <button class="control-btn play-pause" id="playPauseBtn">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <div class="volume-control">
+                                <button class="control-btn volume-btn" id="volumeBtn">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+                                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="100">
+                            </div>
+                            <div class="time-display">
+                                <span id="currentTime">00:00</span> / <span id="duration">00:00</span>
+                            </div>
+                        </div>
+
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-filled"></div>
+                                <div class="progress-handle"></div>
+                            </div>
+                        </div>
+
+                        <div class="controls-right">
+                            <div class="speed-control">
+                                <button class="control-btn speed-btn" id="speedBtn">1x</button>
+                                <div class="speed-menu">
+                                    <button data-speed="0.5">0.5x</button>
+                                    <button data-speed="0.75">0.75x</button>
+                                    <button data-speed="1" class="active">1x</button>
+                                    <button data-speed="1.25">1.25x</button>
+                                    <button data-speed="1.5">1.5x</button>
+                                    <button data-speed="2">2x</button>
+                                </div>
+                            </div>
+                            <button class="control-btn screenshot-btn" id="screenshotBtn" title="Сделать скриншот">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                            <button class="control-btn blur-btn" id="blurBtn" title="Размытие области">
+                                <i class="fas fa-eye-slash"></i>
+                            </button>
+                            <button class="control-btn share-btn" id="shareBtn" title="Поделиться">
+                                <i class="fas fa-share"></i>
+                            </button>
+                            <button class="control-btn fullscreen-btn" id="fullscreenBtn">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Инструмент для размытия -->
+                    <div class="blur-tool" id="blurTool" style="display: none;">
+                        <div class="blur-instructions">
+                            Выделите область для размытия
+                        </div>
+                        <canvas id="blurCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопки под плеером -->
+            <div class="player-actions">
+                <button class="action-btn prev-episode" onclick="previousEpisode()">
+                    <i class="fas fa-chevron-left"></i> Предыдущая серия
+                </button>
+                <button class="action-btn next-episode" onclick="nextEpisode()">
+                    Следующая серия <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция информации о сериале -->
+    <section id="about" class="about-section">
+        <div class="about-container">
+            <h2 class="section-title">О мультсериале</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>«Удивительный мир Гамбола» — это британско-американский анимационный телесериал, 
+                    созданный Беном Бокелером. Сериал рассказывает о приключениях 12-летнего кота по имени 
+                    Гамбол Уоттерсон и его семьи в вымышленном городе Элмор.</p>
+                    <p>Уникальность сериала заключается в смешении различных стилей анимации: 
+                    традиционная 2D-анимация, 3D-графика, кукольная анимация и даже реальные фотографии.</p>
+                </div>
+                <div class="characters-grid">
+                    <div class="character-card">
+                        <img src="images/gumball-char.png" alt="Гамбол">
+                        <h3>Гамбол</h3>
+                        <p>Главный герой, синий кот</p>
+                    </div>
+                    <div class="character-card">
+                        <img src="images/darwin-char.png" alt="Дарвин">
+                        <h3>Дарвин</h3>
+                        <p>Лучший друг, золотая рыбка</p>
+                    </div>
+                    <div class="character-card">
+                        <img src="images/anais-char.png" alt="Анаис">
+                        <h3>Анаис</h3>
+                        <p>Младшая сестра, розовый кролик</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Рекламный блок в середине -->
+    <div id="yandex-ad-middle" class="ad-container">
+        <!-- Место для рекламы Яндекс.Директ -->
+        <div class="ad-placeholder">Реклама</div>
+    </div>
+
+    <!-- Секция скачивания -->
+    <section id="download" class="download-section">
+        <div class="download-container">
+            <h2 class="section-title">Скачать сезон</h2>
+            <p class="download-description">Скачайте первый сезон целиком через торрент</p>
+            <a href="https://anime2.malfurik.org/wp-content/uploads/2020/09/animaunt_udivitelno_strannyj_mir_gambola_the_wonderfully_weird.torrent" 
+               class="download-button" download>
+                <i class="fas fa-download"></i> Скачать Сезон 1 (Torrent)
+            </a>
+            <p class="download-note">
+                <i class="fas fa-info-circle"></i> 
+                Для скачивания требуется торрент-клиент
+            </p>
+        </div>
+    </section>
+
+    <!-- Секция комментариев -->
+    <section class="comments-section">
+        <div class="comments-container">
+            <h2 class="section-title">Комментарии</h2>
+            <div id="giscus-container">
+                <!-- Здесь будет виджет комментариев Giscus -->
+                <script src="https://giscus.app/client.js"
+                        data-repo="YOUR-USERNAME/YOUR-REPO-NAME"
+                        data-repo-id="YOUR-REPO-ID"
+                        data-category="Announcements"
+                        data-category-id="YOUR-CATEGORY-ID"
+                        data-mapping="pathname"
+                        data-strict="0"
+                        data-reactions-enabled="1"
+                        data-emit-metadata="0"
+                        data-input-position="top"
+                        data-theme="light"
+                        data-lang="ru"
+                        crossorigin="anonymous"
+                        async>
+                </script>
+            </div>
+        </div>
+    </section>
+
+    <!-- Подвал сайта -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <p>&copy; 2025 Фан-сайт "Удивительный мир Гамбола"</p>
+                <p>Все права на мультсериал принадлежат Cartoon Network Studios</p>
+                <p>Сайт создан в образовательных целях</p>
+            </div>
+            <div class="footer-social">
+                <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-vk"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно для шеринга -->
+    <div id="shareModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Поделиться ссылкой</h3>
+            <div class="share-link-container">
+                <input type="text" id="shareLink" readonly>
+                <button onclick="copyShareLink()">
+                    <i class="fas fa-copy"></i> Копировать
+                </button>
+            </div>
+            <div class="share-buttons">
+                <a id="shareVK" target="_blank" class="share-social-btn vk">
+                    <i class="fab fa-vk"></i> ВКонтакте
+                </a>
+                <a id="shareTelegram" target="_blank" class="share-social-btn telegram">
+                    <i class="fab fa-telegram"></i> Telegram
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Скрипты -->
+    <script src="js/main.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/comments.js"></script>
+</body>
+</html>
