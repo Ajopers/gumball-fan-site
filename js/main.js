@@ -4,19 +4,19 @@
 let currentSeason = 1;
 let currentEpisode = 1;
 
-// Данные о сериях
+// Данные о сериях (заменены на тестовый видео-файл с CORS-поддержкой для демонстрации; замените на реальные URL серий)
 const episodes = {
     1: [
-        { episodes: "1-2", url: "https://vn888.tigerlips.org/video/mp4/1080/7307.mp4" },
-        { episodes: "3-4", url: "https://vn888.tigerlips.org/video/mp4/1080/7308.mp4" },
-        { episodes: "5-6", url: "https://vn888.tigerlips.org/video/mp4/1080/7309.mp4" },
-        { episodes: "7-8", url: "https://vn888.tigerlips.org/video/mp4/1080/7310.mp4" },
-        { episodes: "9-10", url: "https://vn888.tigerlips.org/video/mp4/1080/7311.mp4" },
-        { episodes: "11-12", url: "https://vn888.tigerlips.org/video/mp4/1080/7312.mp4" },
-        { episodes: "13-14", url: "https://vn888.tigerlips.org/video/mp4/1080/7313.mp4" },
-        { episodes: "15-16", url: "https://vn888.tigerlips.org/video/mp4/1080/7314.mp4" },
-        { episodes: "17-18", url: "https://vn888.tigerlips.org/video/mp4/1080/7315.mp4" },
-        { episodes: "19-20", url: "https://vn888.tigerlips.org/video/mp4/1080/7316.mp4" }
+        { episodes: "1-2", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
+        { episodes: "3-4", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
+        { episodes: "5-6", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
+        { episodes: "7-8", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
+        { episodes: "9-10", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
+        { episodes: "11-12", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
+        { episodes: "13-14", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
+        { episodes: "15-16", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
+        { episodes: "17-18", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
+        { episodes: "19-20", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" }
     ]
 };
 
@@ -102,18 +102,25 @@ function loadEpisode(season, episode) {
         source.src = episodeData.url;
         video.load();
         
-        // Автоматический запуск видео после загрузки (исправление: видео не воспроизводятся)
+        // Автоматический запуск видео после загрузки с muted для обхода политик браузеров
         video.addEventListener('loadeddata', () => {
+            video.muted = true; // Muted для автоплея
             video.play().catch(error => {
                 console.error('Ошибка автоматического воспроизведения:', error);
-                // Если autoplay заблокирован, пользователь увидит кнопку play
+                showVideoError('Не удалось воспроизвести видео. Проверьте соединение или политику браузера.');
             });
         }, { once: true });
         
-        // Добавлена обработка ошибок загрузки (для CORS и других)
+        // Обработка ошибок загрузки (расширена для CORS и 403)
         video.addEventListener('error', (e) => {
             console.error('Ошибка загрузки видео:', e);
-            showVideoError('Не удалось загрузить видео. Проверьте соединение или запустите сайт через сервер (CORS ошибка).');
+            let message = 'Не удалось загрузить видео. ';
+            if (e.target.error.code === 4) { // MEDIA_ERR_SRC_NOT_SUPPORTED or network
+                message += 'Возможно, проблема с CORS. Запустите сайт через локальный сервер (например, Live Server в VSCode).';
+            } else if (e.target.error.code === 3) {
+                message += 'Доступ запрещен (403). Проверьте URL видео.';
+            }
+            showVideoError(message);
         }, { once: true });
         
         // Обновляем селекторы
@@ -143,6 +150,7 @@ function showVideoError(message) {
     errorDiv.style.padding = '20px';
     errorDiv.style.borderRadius = '5px';
     errorDiv.style.zIndex = '100';
+    errorDiv.style.textAlign = 'center';
     errorDiv.textContent = message;
     
     const playerWrapper = document.querySelector('.video-player-wrapper');

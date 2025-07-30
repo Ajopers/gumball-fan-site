@@ -2,15 +2,15 @@
 
 // Конфигурация для Giscus
 const giscusConfig = {
-    repo: 'YOUR-USERNAME/YOUR-REPO-NAME', // Замените на ваш репозиторий
-    repoId: 'YOUR-REPO-ID', // Получите из настроек Giscus
+    repo: 'Ajopers/gumball-fan-site', // Замените на ваш репозиторий
+    repoId: 'R_kgDOPUyQ5g', // Получите из настроек Giscus
     category: 'Announcements',
-    categoryId: 'YOUR-CATEGORY-ID', // Получите из настроек Giscus
+    categoryId: 'DIC_kwDOPUyQ5s4Ctl-S', // Получите из настроек Giscus
     mapping: 'pathname',
     strict: '0',
     reactionsEnabled: '1',
     emitMetadata: '0',
-    inputPosition: 'top',
+    inputPosition: 'bottom',
     theme: 'light',
     lang: 'ru'
 };
@@ -239,18 +239,21 @@ class LocalComments {
             });
         }
         
-        // Делегирование событий для кнопок действий
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.like-btn')) {
-                this.toggleLike(e.target.closest('.like-btn'));
-            }
-            if (e.target.closest('.reply-btn')) {
-                this.toggleReplyForm(e.target.closest('.reply-btn'));
-            }
-            if (e.target.closest('.delete-btn')) {
-                this.deleteComment(e.target.closest('.delete-btn'));
-            }
-        });
+        // Делегирование событий для кнопок действий (исправление: проверка на существование элементов)
+        const commentsList = document.getElementById('commentsList');
+        if (commentsList) {
+            commentsList.addEventListener('click', (e) => {
+                if (e.target.closest('.like-btn')) {
+                    this.toggleLike(e.target.closest('.like-btn'));
+                }
+                if (e.target.closest('.reply-btn')) {
+                    this.toggleReplyForm(e.target.closest('.reply-btn'));
+                }
+                if (e.target.closest('.delete-btn')) {
+                    this.deleteComment(e.target.closest('.delete-btn'));
+                }
+            });
+        }
     }
     
     loadComments() {
@@ -266,7 +269,7 @@ class LocalComments {
         const nameInput = document.getElementById('commentName');
         const textInput = document.getElementById('commentText');
         
-        if (!nameInput.value.trim() || !textInput.value.trim()) return;
+        if (!nameInput || !textInput || !nameInput.value.trim() || !textInput.value.trim()) return;
         
         const comment = {
             id: Date.now(),
@@ -402,10 +405,12 @@ class LocalComments {
     
     addReply(commentId) {
         const form = document.getElementById(`replyForm-${commentId}`);
+        if (!form) return;
+        
         const nameInput = form.querySelector('.reply-name');
         const textInput = form.querySelector('.reply-text');
         
-        if (!nameInput.value.trim() || !textInput.value.trim()) return;
+        if (!nameInput || !textInput || !nameInput.value.trim() || !textInput.value.trim()) return;
         
         const comment = this.comments.find(c => c.id === commentId);
         if (comment) {

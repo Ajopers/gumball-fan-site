@@ -24,7 +24,7 @@ class CustomVideoPlayer {
         // Инструмент размытия
         this.blurTool = document.getElementById('blurTool');
         this.blurCanvas = document.getElementById('blurCanvas');
-        this.blurCtx = this.blurCanvas.getContext('2d');
+        this.blurCtx = this.blurCanvas ? this.blurCanvas.getContext('2d') : null; // Исправление: проверка на null
         this.blurAreas = [];
         this.isBlurMode = false;
         this.isDrawing = false;
@@ -84,7 +84,7 @@ class CustomVideoPlayer {
         if (this.video.paused) {
             this.video.play().catch(e => {
                 console.error('Ошибка воспроизведения:', e);
-                this.showError('Не удалось воспроизвести видео');
+                this.showError('Не удалось воспроизвести видео. Проверьте CORS или политику браузера.');
             });
         } else {
             this.video.pause();
@@ -282,6 +282,8 @@ class CustomVideoPlayer {
     }
     
     initBlurTool() {
+        if (!this.blurTool) return; // Исправление: проверка на существование
+        
         let currentArea = null;
         
         this.blurTool.addEventListener('mousedown', (e) => {
@@ -460,7 +462,14 @@ class CustomVideoPlayer {
     
     handleError(e) {
         console.error('Ошибка видео:', e);
-        this.showError('Произошла ошибка при загрузке видео');
+        let message = 'Произошла ошибка при загрузке видео. ';
+        if (e.target && e.target.error) {
+            message += `Код ошибки: ${e.target.error.code}. `;
+            if (e.target.error.code === 4) {
+                message += 'Проверьте URL или CORS-настройки сервера.';
+            }
+        }
+        this.showError(message);
     }
     
     showError(message) {
