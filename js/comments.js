@@ -47,6 +47,11 @@ class LocalComments {
                         <div class="form-group">
                             <textarea id="commentText" rows="4" placeholder="Ваш комментарий" required></textarea>
                         </div>
+                        <div class="form-group captcha-group">
+                            <label id="captchaQuestion"></label>
+                            <input type="number" id="captchaAnswer" placeholder="Ваш ответ" required>
+                            <div id="captchaError" class="error-message" style="display: none; color: red; font-size: 0.875rem; margin-top: 0.5rem;">Неверный ответ. Попробуйте снова.</div>
+                        </div>
                         <button type="submit" class="submit-comment-btn">
                             <i class="fas fa-paper-plane"></i> Отправить
                         </button>
@@ -63,6 +68,7 @@ class LocalComments {
         
         this.addStyles();
         this.attachEventListeners();
+        this.generateCaptcha(); // Генерация капчи при создании формы
     }
     
     addStyles() {
@@ -206,12 +212,54 @@ class LocalComments {
             
             .reply-form {
                 margin-top: 1rem;
-                padding-left: 2rem;
+                padding: 1rem;
+                background: #f8f9fa;
+                border-radius: 8px;
                 display: none;
+                animation: fadeIn 0.3s ease;
             }
             
             .reply-form.active {
                 display: block;
+            }
+            
+            .reply-form input,
+            .reply-form textarea {
+                width: 100%;
+                padding: 0.5rem;
+                margin-bottom: 0.5rem;
+                border: 2px solid #e0e0e0;
+                border-radius: 5px;
+                transition: border-color 0.3s;
+            }
+            
+            .reply-form input:focus,
+            .reply-form textarea:focus {
+                border-color: var(--primary-color);
+            }
+            
+            .reply-form button {
+                background: var(--primary-color);
+                color: white;
+                border: none;
+                padding: 0.5rem 1rem;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background 0.3s;
+            }
+            
+            .reply-form button:hover {
+                background: var(--secondary-color);
+            }
+            
+            .captcha-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .captcha-group label {
+                margin-bottom: 0.5rem;
+                font-weight: 500;
             }
             
             .replies {
@@ -225,6 +273,11 @@ class LocalComments {
                 padding: 1rem;
                 border-radius: 8px;
                 margin-bottom: 0.5rem;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
             }
         `;
         document.head.appendChild(style);
@@ -256,6 +309,33 @@ class LocalComments {
         }
     }
     
+    // Генерация капчи
+    generateCaptcha() {
+        const num1 = Math.floor(Math.random() * 10) + 1;
+        const num2 = Math.floor(Math.random() * 10) + 1;
+        this.captchaSum = num1 + num2;
+        const questionElem = document.getElementById('captchaQuestion');
+        if (questionElem) {
+            questionElem.textContent = `Сколько будет ${num1} + ${num2}? (Защита от ботов)`;
+        }
+    }
+    
+    // Проверка капчи
+    checkCaptcha() {
+        const answerInput = document.getElementById('captchaAnswer');
+        const errorElem = document.getElementById('captchaError');
+        if (!answerInput || !errorElem) return false;
+        
+        const userAnswer = parseInt(answerInput.value);
+        if (userAnswer === this.captchaSum) {
+            errorElem.style.display = 'none';
+            return true;
+        } else {
+            errorElem.style.display = 'block';
+            return false;
+        }
+    }
+    
     loadComments() {
         const saved = localStorage.getItem('gumballComments');
         return saved ? JSON.parse(saved) : [];
@@ -266,6 +346,8 @@ class LocalComments {
     }
     
     addComment() {
+        if (!this.checkCaptcha()) return;
+        
         const nameInput = document.getElementById('commentName');
         const textInput = document.getElementById('commentText');
         
@@ -288,6 +370,8 @@ class LocalComments {
         // Очистка формы
         nameInput.value = '';
         textInput.value = '';
+        document.getElementById('captchaAnswer').value = '';
+        this.generateCaptcha(); // Новая капча
         
         // Анимация добавления
         this.animateNewComment();
@@ -346,6 +430,11 @@ class LocalComments {
                 <div class="reply-form" id="replyForm-${comment.id}">
                     <input type="text" placeholder="Ваше имя" class="reply-name">
                     <textarea placeholder="Ваш ответ" rows="2" class="reply-text"></textarea>
+                    <div class="form-group captcha-group">
+                        <label id="replyCaptchaQuestion-${comment.id}"></label>
+                        <input type="number" id="replyCaptchaAnswer-${comment.id}" placeholder="Ваш ответ" required>
+                        <div id="replyCaptchaError-${comment.id}" class="error-message" style="display: none; color: red; font-size: 0.875rem; margin-top: 0.5rem;">Неверный ответ. Попробуйте снова.</div>
+                    </div>
                     <button onclick="localComments.addReply(${comment.id})">Отправить</button>
                 </div>
             </div>
@@ -400,10 +489,44 @@ class LocalComments {
         const form = document.getElementById(`replyForm-${id}`);
         if (form) {
             form.classList.toggle('active');
+            if (form.classList.contains('active')) {
+                this.generateReplyCaptcha(id); // Генерация капчи при открытии формы ответа
+            }
+        }
+    }
+    
+    // Генерация капчи для формы ответа
+    generateReplyCaptcha(commentId) {
+        const num1 = Math.floor(Math.random() * 10) + 1;
+        const num2 = Math.floor(Math.random() * 10) + 1;
+        this.replyCaptchaSums = this.replyCaptchaSums || {};
+        this.replyCaptchaSums[commentId] = num1 + num2;
+        
+        const questionElem = document.getElementById(`replyCaptchaQuestion-${commentId}`);
+        if (questionElem) {
+            questionElem.textContent = `Сколько будет ${num1} + ${num2}? (Защита от ботов)`;
+        }
+    }
+    
+    // Проверка капчи для формы ответа
+    checkReplyCaptcha(commentId) {
+        const answerInput = document.getElementById(`replyCaptchaAnswer-${commentId}`);
+        const errorElem = document.getElementById(`replyCaptchaError-${commentId}`);
+        if (!answerInput || !errorElem) return false;
+        
+        const userAnswer = parseInt(answerInput.value);
+        if (userAnswer === this.replyCaptchaSums[commentId]) {
+            errorElem.style.display = 'none';
+            return true;
+        } else {
+            errorElem.style.display = 'block';
+            return false;
         }
     }
     
     addReply(commentId) {
+        if (!this.checkReplyCaptcha(commentId)) return;
+        
         const form = document.getElementById(`replyForm-${commentId}`);
         if (!form) return;
         
@@ -422,6 +545,12 @@ class LocalComments {
             
             this.saveComments();
             this.updateCommentsList();
+            
+            // Очистка формы
+            nameInput.value = '';
+            textInput.value = '';
+            document.getElementById(`replyCaptchaAnswer-${commentId}`).value = '';
+            this.generateReplyCaptcha(commentId); // Новая капча
         }
     }
     

@@ -327,6 +327,10 @@ class CustomVideoPlayer {
                 this.isDrawing = false;
                 currentArea.classList.add('active');
                 
+                // Убираем обводку после создания
+                currentArea.style.border = 'none';
+                currentArea.style.background = 'transparent';
+                
                 // Сохранение области
                 const rect = currentArea.getBoundingClientRect();
                 const toolRect = this.blurTool.getBoundingClientRect();
@@ -339,11 +343,14 @@ class CustomVideoPlayer {
                     element: currentArea
                 });
                 
-                // Добавление кнопки удаления
+                // Добавление кнопки удаления (исправление: onclick теперь работает правильно)
                 const removeBtn = document.createElement('button');
                 removeBtn.className = 'remove-blur-area';
                 removeBtn.innerHTML = '×';
-                removeBtn.onclick = () => this.removeBlurArea(currentArea);
+                removeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Предотвращаем bubbling
+                    this.removeBlurArea(currentArea);
+                });
                 currentArea.appendChild(removeBtn);
                 
                 currentArea = null;
@@ -404,8 +411,7 @@ class CustomVideoPlayer {
             case ' ':
             case 'k':
                 e.preventDefault();
-                this.togglePlayPause();
-                break;
+                this.toggle 1
             case 'f':
                 e.preventDefault();
                 this.toggleFullscreen();

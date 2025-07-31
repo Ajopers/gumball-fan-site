@@ -79,79 +79,10 @@
                 </div>
             </div>
 
-            <!-- Кастомный видеоплеер -->
+            <!-- Контейнер для embed-iframe от Mega -->
             <div class="video-player-wrapper">
-                <div class="custom-video-player">
-                    <video id="main-video" crossorigin="anonymous">
-                        <source src="" type="video/mp4">
-                        Ваш браузер не поддерживает видео.
-                    </video>
-                    
-                    <!-- Оверлей для управления -->
-                    <div class="video-overlay">
-                        <div class="loading-spinner">
-                            <i class="fas fa-spinner fa-spin"></i>
-                        </div>
-                    </div>
-
-                    <!-- Панель управления плеера -->
-                    <div class="video-controls">
-                        <div class="controls-left">
-                            <button class="control-btn play-pause" id="playPauseBtn">
-                                <i class="fas fa-play"></i>
-                            </button>
-                            <div class="volume-control">
-                                <button class="control-btn volume-btn" id="volumeBtn">
-                                    <i class="fas fa-volume-up"></i>
-                                </button>
-                                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="100">
-                            </div>
-                            <div class="time-display">
-                                <span id="currentTime">00:00</span> / <span id="duration">00:00</span>
-                            </div>
-                        </div>
-
-                        <div class="progress-container">
-                            <div class="progress-bar">
-                                <div class="progress-filled"></div>
-                                <div class="progress-handle"></div>
-                            </div>
-                        </div>
-
-                        <div class="controls-right">
-                            <div class="speed-control">
-                                <button class="control-btn speed-btn" id="speedBtn">1x</button>
-                                <div class="speed-menu">
-                                    <button data-speed="0.5">0.5x</button>
-                                    <button data-speed="0.75">0.75x</button>
-                                    <button data-speed="1" class="active">1x</button>
-                                    <button data-speed="1.25">1.25x</button>
-                                    <button data-speed="1.5">1.5x</button>
-                                    <button data-speed="2">2x</button>
-                                </div>
-                            </div>
-                            <button class="control-btn screenshot-btn" id="screenshotBtn" title="Сделать скриншот">
-                                <i class="fas fa-camera"></i>
-                            </button>
-                            <button class="control-btn blur-btn" id="blurBtn" title="Размытие области">
-                                <i class="fas fa-eye-slash"></i>
-                            </button>
-                            <button class="control-btn share-btn" id="shareBtn" title="Поделиться">
-                                <i class="fas fa-share"></i>
-                            </button>
-                            <button class="control-btn fullscreen-btn" id="fullscreenBtn">
-                                <i class="fas fa-expand"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Инструмент для размытия -->
-                    <div class="blur-tool" id="blurTool" style="display: none;">
-                        <div class="blur-instructions">
-                            Выделите область для размытия
-                        </div>
-                        <canvas id="blurCanvas"></canvas>
-                    </div>
+                <div class="custom-video-player" id="embed-container">
+                    <!-- Здесь будет вставлен iframe через JS -->
                 </div>
             </div>
 

@@ -4,19 +4,19 @@
 let currentSeason = 1;
 let currentEpisode = 1;
 
-// Данные о сериях (заменены на тестовый видео-файл с CORS-поддержкой для демонстрации; замените на реальные URL серий)
+// Данные о сериях (теперь локальные пути в репозитории; файлы в videos/season1/)
 const episodes = {
     1: [
-        { episodes: "1-2", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
-        { episodes: "3-4", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
-        { episodes: "5-6", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
-        { episodes: "7-8", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
-        { episodes: "9-10", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
-        { episodes: "11-12", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
-        { episodes: "13-14", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
-        { episodes: "15-16", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
-        { episodes: "17-18", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" },
-        { episodes: "19-20", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" }
+        { episodes: "1-2", url: "videos/season1/1-2.mp4" },
+        { episodes: "3-4", url: "videos/season1/3-4.mp4" },
+        { episodes: "5-6", url: "videos/season1/5-6.mp4" },
+        { episodes: "7-8", url: "videos/season1/7-8.mp4" },
+        { episodes: "9-10", url: "videos/season1/9-10.mp4" },
+        { episodes: "11-12", url: "videos/season1/11-12.mp4" },
+        { episodes: "13-14", url: "videos/season1/13-14.mp4" },
+        { episodes: "15-16", url: "videos/season1/15-16.mp4" },
+        { episodes: "17-18", url: "videos/season1/17-18.mp4" },
+        { episodes: "19-20", url: "videos/season1/19-20.mp4" }
     ]
 };
 
