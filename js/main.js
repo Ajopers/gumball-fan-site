@@ -91,7 +91,7 @@ function updateEpisodeList() {
     });
 }
 
-// Загрузка эпизода (теперь вставляет iframe от Mega)
+// Загрузка эпизода (вставляет iframe от Mega)
 function loadEpisode(season, episode) {
     const episodeData = episodes[season][episode - 1];
     const embedContainer = document.getElementById('embed-container');
@@ -164,8 +164,8 @@ function updateNavigationButtons() {
     const nextBtn = document.querySelector('.next-episode');
     const maxEpisodes = episodes[currentSeason].length;
     
-    prevBtn.disabled = currentEpisode === 1;
-    nextBtn.disabled = currentEpisode === maxEpisodes;
+    if (prevBtn) prevBtn.disabled = currentEpisode === 1;
+    if (nextBtn) nextBtn.disabled = currentEpisode === maxEpisodes;
 }
 
 // Плавная прокрутка

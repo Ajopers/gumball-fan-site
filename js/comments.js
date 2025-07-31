@@ -10,7 +10,7 @@ const giscusConfig = {
     strict: '0',
     reactionsEnabled: '1',
     emitMetadata: '0',
-    inputPosition: 'bottom',
+    inputPosition: 'top',
     theme: 'light',
     lang: 'ru'
 };
@@ -76,18 +76,24 @@ class LocalComments {
         style.textContent = `
             .local-comments {
                 margin-top: 2rem;
+                background: #f8f9fa; /* Светлый фон под сайт */
+                padding: 1.5rem;
+                border-radius: 10px;
+                box-shadow: var(--shadow-1);
             }
             
             .comment-form {
-                background: #f8f9fa;
-                padding: 2rem;
-                border-radius: 10px;
-                margin-bottom: 2rem;
+                background: white;
+                padding: 1.5rem;
+                border-radius: 8px;
+                margin-bottom: 1.5rem;
+                box-shadow: var(--shadow-1);
             }
             
             .comment-form h3 {
-                margin-bottom: 1.5rem;
+                margin-bottom: 1rem;
                 color: var(--dark-color);
+                font-size: 1.2rem;
             }
             
             .form-group {
@@ -131,8 +137,9 @@ class LocalComments {
             }
             
             .comments-list h3 {
-                margin-bottom: 1.5rem;
+                margin-bottom: 1rem;
                 color: var(--dark-color);
+                font-size: 1.2rem;
             }
             
             .comment-item {
@@ -142,6 +149,11 @@ class LocalComments {
                 padding: 1.5rem;
                 margin-bottom: 1rem;
                 position: relative;
+                transition: box-shadow 0.3s;
+            }
+            
+            .comment-item:hover {
+                box-shadow: var(--shadow-2);
             }
             
             .comment-header {
@@ -283,6 +295,7 @@ class LocalComments {
         document.head.appendChild(style);
     }
     
+    // Остальной код без изменений (addEventListeners, loadComments и т.д.)
     attachEventListeners() {
         const form = document.getElementById('localCommentForm');
         if (form) {
@@ -292,7 +305,6 @@ class LocalComments {
             });
         }
         
-        // Делегирование событий для кнопок действий (исправление: проверка на существование элементов)
         const commentsList = document.getElementById('commentsList');
         if (commentsList) {
             commentsList.addEventListener('click', (e) => {
@@ -309,7 +321,6 @@ class LocalComments {
         }
     }
     
-    // Генерация капчи
     generateCaptcha() {
         const num1 = Math.floor(Math.random() * 10) + 1;
         const num2 = Math.floor(Math.random() * 10) + 1;
@@ -320,7 +331,6 @@ class LocalComments {
         }
     }
     
-    // Проверка капчи
     checkCaptcha() {
         const answerInput = document.getElementById('captchaAnswer');
         const errorElem = document.getElementById('captchaError');
@@ -388,7 +398,6 @@ class LocalComments {
         if (container) {
             container.innerHTML = this.renderComments();
             
-            // Обновление счетчика
             const counter = document.querySelector('.comments-list h3');
             if (counter) {
                 counter.textContent = `Комментарии (${this.comments.length})`;
@@ -495,7 +504,6 @@ class LocalComments {
         }
     }
     
-    // Генерация капчи для формы ответа
     generateReplyCaptcha(commentId) {
         const num1 = Math.floor(Math.random() * 10) + 1;
         const num2 = Math.floor(Math.random() * 10) + 1;
@@ -508,7 +516,6 @@ class LocalComments {
         }
     }
     
-    // Проверка капчи для формы ответа
     checkReplyCaptcha(commentId) {
         const answerInput = document.getElementById(`replyCaptchaAnswer-${commentId}`);
         const errorElem = document.getElementById(`replyCaptchaError-${commentId}`);
