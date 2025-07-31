@@ -4,19 +4,19 @@
 let currentSeason = 1;
 let currentEpisode = 1;
 
-// Данные о сериях (теперь локальные пути в репозитории; файлы в videos/season1/)
+// Данные о сериях (embed-ссылки от Mega.nz)
 const episodes = {
     1: [
-        { episodes: "1-2", url: "videos/season1/1-2.mp4" },
-        { episodes: "3-4", url: "videos/season1/3-4.mp4" },
-        { episodes: "5-6", url: "videos/season1/5-6.mp4" },
-        { episodes: "7-8", url: "videos/season1/7-8.mp4" },
-        { episodes: "9-10", url: "videos/season1/9-10.mp4" },
-        { episodes: "11-12", url: "videos/season1/11-12.mp4" },
-        { episodes: "13-14", url: "videos/season1/13-14.mp4" },
-        { episodes: "15-16", url: "videos/season1/15-16.mp4" },
-        { episodes: "17-18", url: "videos/season1/17-18.mp4" },
-        { episodes: "19-20", url: "videos/season1/19-20.mp4" }
+        { episodes: "1-2", url: "https://mega.nz/embed/eRcC3CBJ#mOe8ad6aHoen5xtGh8_aTI-5HKL4sc8QyNPN1t8Arow" },
+        { episodes: "3-4", url: "https://mega.nz/embed/iVFghJZS#doFIeufVJ1ZHhbcQcyIqwARDDuVN0WIFB4N7x-du3OM" },
+        { episodes: "5-6", url: "https://mega.nz/embed/zdM2kQTB#k5AGkKrbcxP3rlri0Vl1GZIiJ6IdPvq-x0xuq2-13lg" },
+        { episodes: "7-8", url: "https://mega.nz/embed/bcclgDDa#dIDGNdf8WYPANxjxZ_hIBUM27bigVR3iTO4Hu-x82I4" },
+        { episodes: "9-10", url: "https://mega.nz/embed/DA9QAKhD#Qs58MwcpG6xcH9e3SIJXr-7FwyUgU7RJlnHmaLt5oSQ" },
+        { episodes: "11-12", url: "https://mega.nz/embed/DY8G3SaC#FK64YTtMxRJ0wHCOSdSPrJgK9cP5G9zSy8cQEsrFx0c" },
+        { episodes: "13-14", url: "https://mega.nz/embed/nQFhTT7I#6SrFxqYF9lPAraZ5JCToRze3eEUPl4qtRulaQNf2p_w" },
+        { episodes: "15-16", url: "https://mega.nz/embed/eNUWBY4Q#-5JzvGc_ERlRUyu5JXSmNgN0loMwmHew4p5zSLRqyuc" },
+        { episodes: "17-18", url: "https://mega.nz/embed/fV9SxRYT#yGtic8c42piNKWszSa3jiZym05OZc0uOURCKvUxnYGg" },
+        { episodes: "19-20", url: "https://mega.nz/embed/eBk2xZBY#bBGRxVH3IC-VT5CW27DyAKY7m1E7GKMnNBQEr5uS-js" }
     ]
 };
 
@@ -91,37 +91,16 @@ function updateEpisodeList() {
     });
 }
 
-// Загрузка эпизода
+// Загрузка эпизода (теперь вставляет iframe от Mega)
 function loadEpisode(season, episode) {
     const episodeData = episodes[season][episode - 1];
-    if (episodeData) {
-        const video = document.getElementById('main-video');
-        const source = video.querySelector('source');
-        
-        // Обновляем источник видео
-        source.src = episodeData.url;
-        video.load();
-        
-        // Автоматический запуск видео после загрузки с muted для обхода политик браузеров
-        video.addEventListener('loadeddata', () => {
-            video.muted = true; // Muted для автоплея
-            video.play().catch(error => {
-                console.error('Ошибка автоматического воспроизведения:', error);
-                showVideoError('Не удалось воспроизвести видео. Проверьте соединение или политику браузера.');
-            });
-        }, { once: true });
-        
-        // Обработка ошибок загрузки (расширена для CORS и 403)
-        video.addEventListener('error', (e) => {
-            console.error('Ошибка загрузки видео:', e);
-            let message = 'Не удалось загрузить видео. ';
-            if (e.target.error.code === 4) { // MEDIA_ERR_SRC_NOT_SUPPORTED or network
-                message += 'Возможно, проблема с CORS. Запустите сайт через локальный сервер (например, Live Server в VSCode).';
-            } else if (e.target.error.code === 3) {
-                message += 'Доступ запрещен (403). Проверьте URL видео.';
-            }
-            showVideoError(message);
-        }, { once: true });
+    const embedContainer = document.getElementById('embed-container');
+    
+    if (episodeData && embedContainer) {
+        // Очищаем контейнер и вставляем новый iframe
+        embedContainer.innerHTML = `
+            <iframe width="100%" height="100%" frameborder="0" src="${episodeData.url}" allowfullscreen></iframe>
+        `;
         
         // Обновляем селекторы
         document.getElementById('season').value = season;
@@ -135,28 +114,11 @@ function loadEpisode(season, episode) {
         
         // Прокручиваем к плееру
         scrollToPlayer();
-    }
-}
-
-// Функция для показа ошибки видео (визуальное уведомление)
-function showVideoError(message) {
-    const errorDiv = document.createElement('div');
-    errorDiv.style.position = 'absolute';
-    errorDiv.style.top = '50%';
-    errorDiv.style.left = '50%';
-    errorDiv.style.transform = 'translate(-50%, -50%)';
-    errorDiv.style.background = 'rgba(255, 0, 0, 0.8)';
-    errorDiv.style.color = 'white';
-    errorDiv.style.padding = '20px';
-    errorDiv.style.borderRadius = '5px';
-    errorDiv.style.zIndex = '100';
-    errorDiv.style.textAlign = 'center';
-    errorDiv.textContent = message;
-    
-    const playerWrapper = document.querySelector('.video-player-wrapper');
-    if (playerWrapper) {
-        playerWrapper.appendChild(errorDiv);
-        setTimeout(() => errorDiv.remove(), 5000);
+    } else {
+        console.error('Контейнер для embed не найден или данные эпизода отсутствуют.');
+        if (embedContainer) {
+            embedContainer.innerHTML = '<div style="text-align: center; color: red; padding: 20px;">Ошибка загрузки видео. Проверьте консоль (F12) или обновите страницу.</div>';
+        }
     }
 }
 
@@ -230,20 +192,10 @@ function scrollToPlayer() {
             behavior: 'smooth',
             block: 'start'
         });
-        
-        // Исправление: после прокрутки запускаем видео (для кнопки "Смотреть сейчас")
-        setTimeout(() => {
-            const video = document.getElementById('main-video');
-            if (video) {
-                video.play().catch(error => {
-                    console.error('Ошибка воспроизведения при прокрутке:', error);
-                });
-            }
-        }, 500); // Задержка для завершения анимации прокрутки
     }
 }
 
-// Функция для кнопки CTA (исправление рекурсии: прямое присвоение без обёртки)
+// Функция для кнопки CTA
 window.scrollToPlayer = scrollToPlayer;
 
 // Модальное окно для шеринга
@@ -253,7 +205,7 @@ function initializeShareModal() {
     
     if (closeBtn && modal) {
         closeBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Исправление: предотвращаем bubbling, чтобы крестик работал надежно
+            e.stopPropagation();
             modal.style.display = 'none';
         });
     }
@@ -269,12 +221,11 @@ function initializeShareModal() {
 window.copyShareLink = function() {
     const shareLink = document.getElementById('shareLink');
     shareLink.select();
-    shareLink.setSelectionRange(0, 99999); // Для мобильных устройств
+    shareLink.setSelectionRange(0, 99999);
     
     try {
         document.execCommand('copy');
         
-        // Визуальная обратная связь
         const button = event.target.closest('button');
         const originalText = button.innerHTML;
         button.innerHTML = '<i class="fas fa-check"></i> Скопировано!';
