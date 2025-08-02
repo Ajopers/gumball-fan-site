@@ -119,7 +119,7 @@ function loadEpisode(season, episode) {
             embedContainer.innerHTML = `
                 <div style="text-align: center; color: red; padding: 20px; font-size: 1.2rem; background: #fff; border: 2px solid red; border-radius: 10px;">
                     <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
-                    Из-за AdBlocker видео не загружается. Пожалуйста, выключите AdBlocker и обновите страницу.
+                    Видео не загружается, отключите Adblock
                 </div>
             `;
             return; // Прерываем загрузку
